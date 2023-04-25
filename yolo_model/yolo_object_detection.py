@@ -12,7 +12,7 @@ from tensorflow.keras.models import load_model
 
 from yad2k.models.keras_yolo import yolo_head
 from yad2k.utils.utils import draw_boxes, scale_boxes, read_classes, read_anchors, \
-    preprocess_image, draw_boxes_for_person
+    preprocess_image, draw_boxes_for_person, predict_names_and_draw_boxes
 
 
 def yolo_filter_boxes(boxes, box_confidence, box_class_probs, threshold=.6):
@@ -192,14 +192,14 @@ def predict(image_file):
 
     print('Found {} boxes for {}'.format(len(out_boxes), image_file))
     draw_boxes(image, out_boxes, out_classes, class_names, out_scores)
-    image.save(os.path.join("out/test/hayan.jpg"), quality=100)
-    output_image = Image.open("out/test/hayan.jpg")
-    imshow(output_image)
+    image.save(os.path.join("out/test/hasini.jpg"), quality=100)
+    output_image = Image.open("out/test/hasini.jpg")
+    # imshow(output_image)
 
     return out_scores, out_boxes, out_classes
 
 
-def predict_person(image_file, output_file_path):
+def predict_person(image_file, output_file_path="yolo_predictions", predict_actual_person=False):
     """
     Runs the graph to predict boxes for "image_file". Prints and plots the predictions.
 
@@ -222,8 +222,11 @@ def predict_person(image_file, output_file_path):
 
     out_scores, out_boxes, out_classes = yolo_eval(yolo_outputs, [image.size[1], image.size[0]], 10, 0.3, 0.5)
 
-    # print('Found {} boxes for {}'.format(len(out_boxes), image_file))
-    draw_boxes_for_person(image, image_file, out_boxes, out_classes, class_names, out_scores, output_file_path)
+    print('Found {} boxes for {}'.format(len(out_boxes), image_file))
+    if predict_actual_person:
+        predict_names_and_draw_boxes(image, image_file, out_boxes, out_classes, class_names, out_scores, output_file_path)
+    else:
+        draw_boxes_for_person(image, image_file, out_boxes, out_classes, class_names, out_scores, output_file_path)
     return out_scores, out_boxes, out_classes
 
 
@@ -237,5 +240,5 @@ def predict_person(image_file, output_file_path):
 #
 # print(count)
 
-out_scores, out_boxes, out_classes = predict("../test/hayan.jpg")
+out_scores, out_boxes, out_classes = predict("/Users/umeshkumar/PycharmProjects/CV_Project/new_dataset/predict/IMG_20190816_070221.jpg")
 
