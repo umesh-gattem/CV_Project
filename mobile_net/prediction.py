@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 import tensorflow as tf
+
 print(tf.__version__)
 mobile_net_model = tf.keras.models.load_model("model_output/image_classify")
 
@@ -21,16 +22,23 @@ def predict_person(directory):
         count += 1
     result = []
     for i in outputs:
-        if i[0] < 0.5:
-            result.append(0)
-        else:
-            result.append(1)
-
+        result.append(np.argmax(i))
     return result
+#
+# directory = '../yolo_predictions/Hayan/'
+# print(predict_person(directory))
+#
+# directory = '../yolo_predictions/Umesh/'
+# print(predict_person(directory))
+#
+# directory = '../yolo_predictions/Hasini/'
+# print(predict_person(directory))
+#
+# directory = '../yolo_predictions/Madhuri/'
+# print(predict_person(directory))
+#
+# directory = '../yolo_predictions/Rohith/'
+# print(predict_person(directory))
 
-
-directory = '../yolo_predictions/Hayan/'
-print(predict_person(directory))
-
-directory = '../yolo_predictions/Umesh/'
+directory = '../new_dataset/predict/'
 print(predict_person(directory))
