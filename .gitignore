@@ -5,3 +5,6 @@ yolo_model/model_data
 test/
 yolo_model/out
 /mobile_net/model_output/
+/new_dataset/
+/inception/model_output/
+/resnet/model_output/
