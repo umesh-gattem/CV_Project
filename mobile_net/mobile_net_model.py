@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.layers.experimental.preprocessing import RandomFlip, RandomRotation
 from tensorflow.keras.preprocessing import image_dataset_from_directory
-
+import json
 print(tf.__version__)
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
@@ -13,6 +13,7 @@ train_dataset = image_dataset_from_directory(input_directory,
                                              image_size=IMG_SIZE,
                                              validation_split=0.2,
                                              subset='training',
+                                             label_mode="categorical",
                                              seed=42)
 validation_dataset = image_dataset_from_directory(input_directory,
                                                   shuffle=True,
@@ -20,12 +21,15 @@ validation_dataset = image_dataset_from_directory(input_directory,
                                                   image_size=IMG_SIZE,
                                                   validation_split=0.2,
                                                   subset='validation',
+                                                  label_mode="categorical",
                                                   seed=42)
 validation_batches = tf.data.experimental.cardinality(validation_dataset)
 test_dataset = validation_dataset.take((2 * validation_batches) // 3)
 validation_dataset = validation_dataset.skip((2 * validation_batches) // 3)
 
 class_names = train_dataset.class_names
+num_classes = len(class_names)
+print(class_names)
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 train_dataset = train_dataset.prefetch(buffer_size=AUTOTUNE)
@@ -109,7 +113,7 @@ def image_claasification(image_shape=IMG_SIZE, data_augmentation=data_augmenter(
     x = tf.keras.layers.Dropout(0.2)(x)
 
     # use a prediction layer with one neuron (as a binary classifier only needs one)
-    outputs = tf.keras.layers.Dense(1, activation='sigmoid')(x)
+    outputs = tf.keras.layers.Dense(num_classes, activation='softmax')(x)
 
     model = tf.keras.Model(inputs, outputs)
 
@@ -120,7 +124,7 @@ model = image_claasification(IMG_SIZE, data_augmentation)
 
 base_learning_rate = 0.001
 model.compile(optimizer=tf.keras.optimizers.Adam(lr=base_learning_rate),
-              loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+              loss=tf.keras.losses.CategoricalCrossentropy(from_logits=False),
               metrics=['accuracy'])
 
 initial_epochs = 5
@@ -145,7 +149,7 @@ for layer in base_model.layers[:fine_tune_at]:
     layer.trainable = False
 
 # Define a BinaryCrossentropy loss function. Use from_logits=True
-loss_function = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+loss_function = tf.keras.losses.CategoricalCrossentropy(from_logits=False)
 # Define an Adam optimizer with a learning rate of 0.1 * base_learning_rate
 optimizer = tf.keras.optimizers.Adam(learning_rate=0.1 * base_learning_rate)
 # Use accuracy as evaluation metric
@@ -170,26 +174,33 @@ val_loss += history_fine.history['val_loss']
 plt.plot(acc, label='Training Accuracy')
 plt.plot(val_acc, label='Valid Accuracy')
 plt.legend(loc="lower right")
+plt.savefig('accuracy.png')
 plt.show()
 
 plt.plot(loss, label='Training Loss')
 plt.plot(val_loss, label='Valid Loss')
 plt.legend(loc="lower right")
+plt.savefig('loss.png')
 plt.show()
 
 model.save("model_output/image_classify")
+with open('history.json', 'w') as f:
+    json.dump(history.history, f)
+
+with open('history1.json', 'w') as f:
+    json.dump(history_fine.history, f)
 ## Evaluation:
 
 print(model.evaluate(test_dataset))
 
 ## Prediction
-image_batch, label_batch = next(iter(test_dataset))
-outputs = model.predict(image_batch)
-result = []
-for i in outputs:
-    if i[0] < 0.5:
-        result.append(0)
-    else:
-        result.append(1)
-print(result)
-print(label_batch)
+# image_batch, label_batch = next(iter(test_dataset))
+# outputs = model.predict(image_batch)
+# result = []
+# for i in outputs:
+#     if i[0] < 0.5:
+#         result.append(0)
+#     else:
+#         result.append(1)
+# print(result)
+# print(label_batch)
