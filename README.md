@@ -1,6 +1,6 @@
-## Facial Recognition on Google Photos:
+# Facial Recognition on Google Photos
 
-#### Project Overview:
+### Project Overview:
 
 This project aims to create an image classification system for personal Google Photos, using 
 deep learning models and computer vision techniques. Unlike typical facial recognition algorithms, 
@@ -11,7 +11,7 @@ and rotation, as well as potentially using deep learning models like Generative 
 Networks (GAN) or Autoencoders to generate more data. The end result will be a custom model 
 that is fine-tuned to accurately classify images in the user's Google Photos collection.
 
-####Requirements:
+### Requirements:
 
 We can install all the required libraries using following command.
 
@@ -19,7 +19,7 @@ We can install all the required libraries using following command.
 pip3 install -r requirements.txt
 ```
 
-#### Model
+### Model
 
 The model is composed of several blocks, including Data Preparation, Object Detection, Transfer Learning 
 for Feature Extraction, and Fine-tuning. To prepare the data, I utilized the Google Photos website to 
