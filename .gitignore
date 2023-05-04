@@ -28,3 +28,9 @@ yolo_model/out
 /resnet/history1.json
 /resnet/loss.png
 /resnet/loss_graph.py
+/GooglePhotosAPI/AlbumPhotos/
+/GooglePhotosAPI/CroppedImages/
+/GooglePhotosAPI/Photos/
+/GooglePhotosAPI/credentials.json
+/GooglePhotosAPI/GooglePhotos.json
+/GooglePhotosAPI/token.pickle
