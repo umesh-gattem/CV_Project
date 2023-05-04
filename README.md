@@ -28,7 +28,7 @@ my local device. Object detection was performed using the YOLO (You Only Look On
 extraction was achieved using various models such as MobileNet, ResNet, Inception, and Inception-ResNet. 
 The visual representation of model can be shown as below
 
-![Model](https://github.com/umesh-gattem/CV Project Model.png)
+![Model](https://github.com/umesh-gattem/CV_Project/blob/master/CV%20Project%20Model.png)
 
 
 
