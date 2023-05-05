@@ -47,6 +47,37 @@ python3 GooglePhotosAPI/read_photos_from_albums.py
  
 Note: To run the above file we need to have GooglePhotos.json which is a credential file we need to create from Google Cloud Console.
 
+### YOLO Model
 
+The YOLO model used in this project is trained on the COCO dataset and can detect 80 classes of objects, such as 
+people, cars, airplanes, dogs, fire hydrants, and stop signs. We need to run YOLO model to get boundary boxes of the 
+images with person image.
+
+We can run the YOLO model using the following command.
+
+```python
+python3 yolo_model/yolo_object_detection.py
+```
+When we run above file it creates the folders of all input data with the boundary boxes of all images.
+
+### Feature Extraction
+
+Once all the images are created with the yolo_predictions we need to extract features using the transfer learning. 
+For transfer learning I am using 4 differnet models which are MobileNet, ResNet, Inception, Inception-ResNet models.
+
+We can run those models using following command. 
+
+```python
+python3 mobile_net/mobile_net_model.py
+python3 resnet/resnet_model.py
+python3 inception/inception_model.py
+python3 inception_resnet/inception_resnet_model.py
+```
+
+By running above file it will run feature extraction and fine-tune the model for 10 epochs.
+
+Note : I didn't push any of the data since image data is more and 
+it can't be pushed through git. I am trying to push data and saved model to 
+google drive where you can download and run the above files in your local. At currently you can't run any of these files. 
 
 
