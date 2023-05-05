@@ -9,6 +9,7 @@ import tensorflow as tf
 from PIL import Image
 from matplotlib.pyplot import imshow
 from tensorflow.keras.models import load_model
+from string_constants import PROJECT_FOLDER
 
 from yad2k.models.keras_yolo import yolo_head
 from yad2k.utils.utils import draw_boxes, scale_boxes, read_classes, read_anchors, \
@@ -230,15 +231,13 @@ def predict_person(image_file, output_file_path="yolo_predictions", predict_actu
     return out_scores, out_boxes, out_classes
 
 
-# input_file_path = "../dataset"
-# files = Path(input_file_path).glob('*/*')
-# output_file_path = "../yolo_predictions"
-# count = 1
-# for file in files:
-#     out_scores, out_boxes, out_classes = predict_person(file, output_file_path=output_file_path)
-#     count += 1
-#
-# print(count)
+input_file_path = PROJECT_FOLDER + "/dataset"
+files = Path(input_file_path).glob('*/*')
+output_file_path = PROJECT_FOLDER + "/yolo_predictions"
+count = 1
+for file in files:
+    out_scores, out_boxes, out_classes = predict_person(file, output_file_path=output_file_path)
+    count += 1
+print(count)
 
-out_scores, out_boxes, out_classes = predict("/Users/umeshkumar/PycharmProjects/CV_Project/new_dataset/predict/IMG_20190816_070221.jpg")
 

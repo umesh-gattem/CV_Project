@@ -5,20 +5,21 @@ import requests
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from string_constants import PROJECT_FOLDER
 
 SCOPES = ['https://www.googleapis.com/auth/photoslibrary.readonly',
           "https://www.googleapis.com/auth/photoslibrary.sharing"]
 creds = None
-if os.path.exists("token.pickle"):
-    with open("token.pickle", "rb") as tokenFile:
+if os.path.exists(PROJECT_FOLDER + "/token.pickle"):
+    with open(PROJECT_FOLDER + "/token.pickle", "rb") as tokenFile:
         creds = pickle.load(tokenFile)
 if not creds or not creds.valid:
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
     else:
-        flow = InstalledAppFlow.from_client_secrets_file('GooglePhotos.json', scopes=SCOPES)
+        flow = InstalledAppFlow.from_client_secrets_file(PROJECT_FOLDER + '/GooglePhotos.json', scopes=SCOPES)
         creds = flow.run_local_server(port=0)
-    with open("token.pickle", "wb") as tokenFile:
+    with open(PROJECT_FOLDER + "/token.pickle", "wb") as tokenFile:
         pickle.dump(creds, tokenFile)
 service = build('photoslibrary', 'v1', credentials=creds, static_discovery=False)
 
@@ -36,7 +37,7 @@ for item in items:
         media_files = media_service['mediaItems']
         for media_item in media_files:
             if media_item["mimeType"] == 'image/jpeg':
-                filename = f"AlbumPhotos/{item['title']}/{media_item['filename']}"
+                filename = f"PROJECT_FOLDER/AlbumPhotos/{item['title']}/{media_item['filename']}"
                 os.makedirs(os.path.dirname(filename), exist_ok=True)
                 with open(filename, 'wb') as f:
                     f.write(requests.get(media_item['baseUrl']).content)

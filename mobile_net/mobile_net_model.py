@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.layers.experimental.preprocessing import RandomFlip, RandomRotation
 from tensorflow.keras.preprocessing import image_dataset_from_directory
+from string_constants import PROJECT_FOLDER
 import json
 print(tf.__version__)
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
-input_directory = "../yolo_predictions"
+input_directory = f"{PROJECT_FOLDER}/yolo_predictions"
 train_dataset = image_dataset_from_directory(input_directory,
                                              shuffle=True,
                                              batch_size=BATCH_SIZE,
